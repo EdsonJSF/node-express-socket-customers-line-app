@@ -1,3 +1,6 @@
+const TicketControl = require("../models/ticket-control");
+const ticketcontrol = new TicketControl();
+
 const socketController = (socket) => {
   // socket.on("disconnect", () => {});
 
