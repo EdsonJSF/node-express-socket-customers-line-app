@@ -49,7 +49,7 @@ class TicketControl {
     this.tickets.push(ticket);
 
     this.saveDB();
-    return `Ticket ${this.number}`;
+    return `Ticket ${this.last}`;
   }
 
   answerTicket(desk) {
