@@ -10,6 +10,31 @@ const socketController = (socket) => {
 
     // TODO: new ticket
   });
+
+  socket.on("answer-ticket", ({ desk }, callback) => {
+    if (!desk) {
+      return callback({
+        ok: false,
+        msg: "Desk is require",
+      });
+    }
+
+    const ticket = tickeControl.answerTicket(desk);
+
+    // TODO: Push last 4 notifications
+
+    if (!ticket) {
+      return callback({
+        ok: false,
+        msg: "No have tickets",
+      });
+    }
+
+    return callback({
+      ok: true,
+      ticket,
+    });
+  });
 };
 
 module.exports = {
