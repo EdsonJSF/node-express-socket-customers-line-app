@@ -3,6 +3,7 @@ const tickeControl = new TicketControl();
 
 const socketController = (socket) => {
   socket.emit("last-ticket", tickeControl.last);
+  socket.emit("current-state", tickeControl.last4);
 
   socket.on("next-ticket", (payload, callback) => {
     const nextTicket = tickeControl.nextTicket();
@@ -21,7 +22,7 @@ const socketController = (socket) => {
 
     const ticket = tickeControl.answerTicket(desk);
 
-    // TODO: Push last 4 notifications
+    socket.broadcast.emit("current-state", tickeControl.last4);
 
     if (!ticket) {
       return callback({
