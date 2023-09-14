@@ -4,12 +4,13 @@ const tickeControl = new TicketControl();
 const socketController = (socket) => {
   socket.emit("last-ticket", tickeControl.last);
   socket.emit("current-state", tickeControl.last4);
+  socket.emit("total-tickets", tickeControl.tickets.length);
 
   socket.on("next-ticket", (payload, callback) => {
     const nextTicket = tickeControl.nextTicket();
     callback(nextTicket);
 
-    // TODO: new ticket
+    socket.broadcast.emit("total-tickets", tickeControl.tickets.length);
   });
 
   socket.on("answer-ticket", ({ desk }, callback) => {
@@ -23,6 +24,8 @@ const socketController = (socket) => {
     const ticket = tickeControl.answerTicket(desk);
 
     socket.broadcast.emit("current-state", tickeControl.last4);
+    socket.emit("total-tickets", tickeControl.tickets.length);
+    socket.broadcast.emit("total-tickets", tickeControl.tickets.length);
 
     if (!ticket) {
       return callback({

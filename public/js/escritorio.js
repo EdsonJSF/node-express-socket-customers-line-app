@@ -2,6 +2,7 @@
 const lblDesk = document.querySelector("h1");
 const lblTicket = document.querySelector("small");
 const lblAlert = document.querySelector(".alert");
+const lblPendientes = document.querySelector("#lblPendientes");
 const buttonAttend = document.querySelector("button");
 
 const searchParams = new URLSearchParams(window.location.search);
@@ -27,7 +28,16 @@ socketClient.on("disconnect", () => {
   buttonAttend.disabled = true;
 });
 
-socketClient.on("last-ticket", (lastTicket) => {});
+socketClient.on("total-tickets", (totalTickets) => {
+  if (totalTickets) {
+    lblPendientes.classList.remove("d-none");
+    lblPendientes.innerText = totalTickets;
+    lblAlert.classList.add("d-none");
+  } else {
+    lblAlert.classList.remove("d-none");
+    lblPendientes.classList.add("d-none");
+  }
+});
 
 buttonAttend.addEventListener("click", () => {
   socketClient.emit("answer-ticket", { desk }, ({ ok, msg, ticket }) => {
